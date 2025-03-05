@@ -12,6 +12,9 @@ type Config struct {
 	DBUser           string `env:"DB_USER" required:"false"`
 	DBPasswd         string `env:"DB_PASSWD" required:"false"`
 	DBName           string `env:"DB_NAME" required:"false"`
+	ZoomJWTSecret 			string	`env:"ZOOM_JWT_SECRET" required:"false"`
+	ZoomClientID 			string	`env:"ZOOM_CLIENT_ID" required:"false"`
+	ZoomAccessToken 		string	`env:"ZOOM_ACCESS_TOKEN" required:"false"`
 }
 
 func NewConfig(logger *zap.Logger) (Config, error) {

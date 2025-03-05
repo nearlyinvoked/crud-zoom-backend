@@ -2,12 +2,17 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+
+	"crud-zoom/controllers"
+	"crud-zoom/services"
 )
 
-func (r *route) initZoom(bs *gin.RouterGroup) {
+func (r *route) initZoom(app *gin.RouterGroup) {
+	zoomSvc := services.NewZoomService(r.cfg, r.logger, r.repo)
+	zoomCtrl := controllers.NewZoomController(r.cfg, r.logger, zoomSvc)
 
-	user := bs.Group("/zoom")
-	user.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello, World!")
-	})
+	zoom := app.Group("/zoom")
+	zoom.GET("/", zoomCtrl.List)
+	zoom.POST("/create", zoomCtrl.Create)
+	zoom.POST("/update/:id", zoomCtrl.Update)
 }
