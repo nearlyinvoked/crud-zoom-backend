@@ -13,8 +13,8 @@ import (
 
 type ZoomSvc interface {
 	ListMeeting() (map[string]interface{}, error)
-	CreateMeeting() (map[string]interface{}, error)
-	UpdateMeeting(meetingID string) (int, error)
+	CreateMeeting(agenda string, meetingTime string) (map[string]interface{}, error)
+	UpdateMeeting(meetingID string, agenda string, meetingTime string) (int, error)
 	DeleteMeeting(meetingID string) (int, error)
 }
 
@@ -77,18 +77,18 @@ func (z *ZoomService) ListMeeting() (map[string]interface{}, error) {
 	return responseBody, nil
 }
 
-func (z *ZoomService) CreateMeeting() (map[string]interface{}, error) {
+func (z *ZoomService) CreateMeeting(agenda string, meetingTime string) (map[string]interface{}, error) {
 	// Define the meeting details
 	meetingDetails := map[string]interface{}{
-			"agenda":           "My Meeting",
+			"agenda":           agenda,
 			"default_password": false,
 			"duration":         60,
 			"password":         "123456",
 			"pre_schedule":     false,
 			"schedule_for":     "kevin.test.zoom@gmail.com",
-			"start_time": "2022-03-25T07:32:55Z",
+			"start_time": meetingTime,
 			"timezone":   "Indonesia/Jakarta",
-			"topic":      "My Meeting",
+			"topic":      agenda,
 			"type":       2,
 	}
 
@@ -145,7 +145,7 @@ func (z *ZoomService) CreateMeeting() (map[string]interface{}, error) {
 	return responseBody, nil
 }
 
-func (z *ZoomService) UpdateMeeting(meetingID string) (int, error) {
+func (z *ZoomService) UpdateMeeting(meetingID string, agenda string, meetingTime string) (int, error) {
 	// Define the meeting ID and update details
 	updateDetails := map[string]interface{}{
 		"agenda":       "My Meeting",
@@ -153,7 +153,7 @@ func (z *ZoomService) UpdateMeeting(meetingID string) (int, error) {
 		"password":     "123456",
 		"pre_schedule": false,
 		"schedule_for": "kevin.test.zoom@gmail.com",
-		"start_time": "2025-03-20T07:29:29Z",
+		"start_time": meetingTime,
 		"template_id": "5Cj3ceXoStO6TGOVvIOVPA==",
 		"timezone":   "Indonesia/Jakarta",
 		"topic":      "My Meeting",

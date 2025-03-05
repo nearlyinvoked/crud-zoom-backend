@@ -34,7 +34,18 @@ func (z *ZoomController) List(c *gin.Context) {
 }
 
 func (z *ZoomController) Create(c *gin.Context) {
-	res, err := z.zoomService.CreateMeeting()
+	var requestBody struct {
+		Agenda      string `json:"agenda"`
+		MeetingTime string `json:"meeting_time"`
+	}
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		z.logger.Error(err.Error())
+		c.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	res, err := z.zoomService.CreateMeeting(requestBody.Agenda, requestBody.MeetingTime)
 	if err != nil {
 		z.logger.Error(err.Error())
 		c.JSON(500, gin.H{"error": err.Error()})
@@ -46,7 +57,19 @@ func (z *ZoomController) Create(c *gin.Context) {
 
 func (z *ZoomController) Update(c *gin.Context) {
 	id := c.Param("id")
-	res, err := z.zoomService.UpdateMeeting(id)
+
+	var requestBody struct {
+		Agenda      string `json:"agenda"`
+		MeetingTime string `json:"meeting_time"`
+	}
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		z.logger.Error(err.Error())
+		c.JSON(400, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	res, err := z.zoomService.UpdateMeeting(id, requestBody.Agenda, requestBody.MeetingTime)
 	if err != nil {
 		z.logger.Error(err.Error())
 		c.JSON(500, gin.H{"error": err.Error()})
