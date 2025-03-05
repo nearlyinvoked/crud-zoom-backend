@@ -61,3 +61,21 @@ func (z *ZoomController) Update(c *gin.Context) {
 		return
 	}
 }
+
+func (z *ZoomController) Delete(c *gin.Context) {
+	id := c.Param("id")
+	res, err := z.zoomService.DeleteMeeting(id)
+	if err != nil {
+		z.logger.Error(err.Error())
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	if res < 300 {
+		c.JSON(res, gin.H{"message": "Meeting deleted successfully"})
+		return
+	} else {
+		c.JSON(500, gin.H{"error": "Failed to delete meeting"})
+		return
+	}
+}

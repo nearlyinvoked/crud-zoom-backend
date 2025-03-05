@@ -15,6 +15,7 @@ type ZoomSvc interface {
 	ListMeeting() (map[string]interface{}, error)
 	CreateMeeting() (map[string]interface{}, error)
 	UpdateMeeting(meetingID string) (int, error)
+	DeleteMeeting(meetingID string) (int, error)
 }
 
 type ZoomService struct {
@@ -194,5 +195,35 @@ func (z *ZoomService) UpdateMeeting(meetingID string) (int, error) {
 	}
 
 	z.logger.Info("Meeting updated successfully")
+	return resp.StatusCode, nil
+}
+
+func (z *ZoomService) DeleteMeeting(meetingID string) (int, error) {
+	// Create the HTTP request
+	req, err := http.NewRequest("DELETE", "https://api.zoom.us/v2/meetings/"+meetingID, nil)
+	if err != nil {
+		z.logger.Error("Failed to create HTTP request", zap.Error(err))
+		return http.StatusInternalServerError, err
+	}
+
+	// Set the request headers
+	req.Header.Set("Authorization", "Bearer "+z.cfg.ZoomAccessToken)
+
+	// Send the HTTP request
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		z.logger.Error("Failed to send HTTP request", zap.Error(err))
+		return http.StatusInternalServerError, err
+	}
+	defer resp.Body.Close()
+
+	// Check the response status
+	if resp.StatusCode != http.StatusNoContent {
+		z.logger.Error("Failed to delete meeting", zap.Int("status", resp.StatusCode))
+		return resp.StatusCode, err
+	}
+
+	z.logger.Info("Meeting deleted successfully")
 	return resp.StatusCode, nil
 }

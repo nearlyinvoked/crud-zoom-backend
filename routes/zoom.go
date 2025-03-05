@@ -14,5 +14,6 @@ func (r *route) initZoom(app *gin.RouterGroup) {
 	zoom := app.Group("/zoom")
 	zoom.GET("/", zoomCtrl.List)
 	zoom.POST("/create", zoomCtrl.Create)
-	zoom.POST("/update/:id", zoomCtrl.Update)
+	zoom.PATCH("/update/:id", zoomCtrl.Update)
+	zoom.DELETE("/delete/:id", zoomCtrl.Delete)
 }
