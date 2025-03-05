@@ -148,7 +148,7 @@ func (z *ZoomService) CreateMeeting(agenda string, meetingTime string) (map[stri
 func (z *ZoomService) UpdateMeeting(meetingID string, agenda string, meetingTime string) (int, error) {
 	// Define the meeting ID and update details
 	updateDetails := map[string]interface{}{
-		"agenda":       "My Meeting",
+		"agenda":       agenda,
 		"duration":     60,
 		"password":     "123456",
 		"pre_schedule": false,
@@ -156,7 +156,7 @@ func (z *ZoomService) UpdateMeeting(meetingID string, agenda string, meetingTime
 		"start_time": meetingTime,
 		"template_id": "5Cj3ceXoStO6TGOVvIOVPA==",
 		"timezone":   "Indonesia/Jakarta",
-		"topic":      "My Meeting",
+		"topic":      agenda,
 		"type": 2,
 	}
 
